@@ -65,12 +65,12 @@ class ProxyPlugins:
         for p in plugins:
             self.add_plugin(p)
 
-        log.debug("Loaded {} plugin/s".format(len(plugins)))
+        log.debug("Loaded {0} plugin/s".format(len(plugins)))
 
     def add_plugin(self,p):
         '''Load a plugin'''
         self.plugin_list.append(p)
-        log.debug("Adding {} plugin".format(p.name))
+        log.debug("Adding {0} plugin".format(p.name))
         for mthd,pmthd in self.mthdDict.iteritems():
             try:
                 self.plugin_mthds[mthd].append(getattr(p,pmthd))
@@ -80,7 +80,7 @@ class ProxyPlugins:
     def remove_plugin(self,p):
         '''Unload a plugin'''
         self.plugin_list.remove(p)
-        log.debug("Removing {} plugin".format(p.name))
+        log.debug("Removing {0} plugin".format(p.name))
         for mthd,pmthd in self.mthdDict.iteritems():
             try:
                 self.plugin_mthds[mthd].remove(getattr(p,pmthd))
@@ -108,7 +108,7 @@ class ProxyPlugins:
 
         del args['self']
 
-        log.debug("hooking {}()".format(fname))
+        log.debug("hooking {0}()".format(fname))
         #calls any plugin that has this hook
         try:
             if self.plugin_mthds:

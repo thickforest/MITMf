@@ -34,32 +34,32 @@ def shutdown(message=None):
     sys.exit(message)
 
 def set_ip_forwarding(value):
-    log.debug("Setting ip forwarding to {}".format(value))
+    log.debug("Setting ip forwarding to {0}".format(value))
     with open('/proc/sys/net/ipv4/ip_forward', 'w') as file:
         file.write(str(value))
         file.close()
 
 def get_iface():
     iface = get_working_if()
-    log.debug("Interface {} seems to be up and running")
+    log.debug("Interface {0} seems to be up and running")
     return iface
 
 def get_ip(interface):
     try:
         ip_address = get_if_addr(interface)
         if (ip_address == "0.0.0.0") or (ip_address is None):
-            shutdown("Interface {} does not have an assigned IP address".format(interface))
+            shutdown("Interface {0} does not have an assigned IP address".format(interface))
 
         return ip_address
     except Exception as e:
-        shutdown("Error retrieving IP address from {}: {}".format(interface, e))
+        shutdown("Error retrieving IP address from {0}: {1}".format(interface, e))
 
 def get_mac(interface):
     try:
         mac_address = get_if_hwaddr(interface)
         return mac_address
     except Exception as e:
-        shutdown("Error retrieving MAC address from {}: {}".format(interface, e))
+        shutdown("Error retrieving MAC address from {0}: {1}".format(interface, e))
 
 class iptables:
 
@@ -82,18 +82,18 @@ class iptables:
         self.nfqueue = False
 
     def HTTP(self, http_redir_port):
-        log.debug("Setting iptables HTTP redirection rule from port 80 to {}".format(http_redir_port))
-        os.system('iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port {}'.format(http_redir_port))
+        log.debug("Setting iptables HTTP redirection rule from port 80 to {0}".format(http_redir_port))
+        os.system('iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port {0}'.format(http_redir_port))
         self.http = True
 
     def DNS(self, dns_redir_port):
-        log.debug("Setting iptables DNS redirection rule from port 53 to {}".format(dns_redir_port))
-        os.system('iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port {}'.format(dns_redir_port))
+        log.debug("Setting iptables DNS redirection rule from port 53 to {0}".format(dns_redir_port))
+        os.system('iptables -t nat -A PREROUTING -p udp --destination-port 53 -j REDIRECT --to-port {0}'.format(dns_redir_port))
         self.dns = True
 
     def SMB(self, smb_redir_port):
-        log.debug("Setting iptables SMB redirection rule from port 445 to {}".format(smb_redir_port))
-        os.system('iptables -t nat -A PREROUTING -p tcp --destination-port 445 -j REDIRECT --to-port {}'.format(smb_redir_port))
+        log.debug("Setting iptables SMB redirection rule from port 445 to {0}".format(smb_redir_port))
+        os.system('iptables -t nat -A PREROUTING -p tcp --destination-port 445 -j REDIRECT --to-port {0}'.format(smb_redir_port))
         self.smb = True
 
     def NFQUEUE(self):

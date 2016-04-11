@@ -35,9 +35,9 @@ class Plugin(ConfigWatcher):
         if self.desc:
             sgroup = parser.add_argument_group(self.name, self.desc)
         else:
-            sgroup = parser.add_argument_group(self.name,"Options for the '{}' plugin".format(self.name))
+            sgroup = parser.add_argument_group(self.name,"Options for the '{0}' plugin".format(self.name))
 
-        sgroup.add_argument("--{}".format(self.optname), action="store_true",help="Load plugin '{}'".format(self.name))
+        sgroup.add_argument("--{0}".format(self.optname), action="store_true",help="Load plugin '{0}'".format(self.name))
 
         self.options(sgroup)
 
@@ -89,11 +89,11 @@ class Plugin(ConfigWatcher):
         pass
 
     def setup_logger(self):
-        formatter = logging.Formatter("%(asctime)s [{}] %(message)s".format(self.name), datefmt="%Y-%m-%d %H:%M:%S")
+        formatter = logging.Formatter("%(asctime)s [{0}] %(message)s".format(self.name), datefmt="%Y-%m-%d %H:%M:%S")
         self.log = logger().setup_logger(self.name, formatter)
 
-        formatter = logging.Formatter("%(asctime)s %(clientip)s [type:%(browser)s-%(browserv)s os:%(clientos)s] [{}] %(message)s".format(self.name), datefmt="%Y-%m-%d %H:%M:%S")
-        self.clientlog = logger().setup_logger("{}_{}".format(self.name, "clientlog"), formatter)
+        formatter = logging.Formatter("%(asctime)s %(clientip)s [type:%(browser)s-%(browserv)s os:%(clientos)s] [{0}] %(message)s".format(self.name), datefmt="%Y-%m-%d %H:%M:%S")
+        self.clientlog = logger().setup_logger("{0}_{1}".format(self.name, "clientlog"), formatter)
 
     def on_shutdown(self):
         '''This will be called when shutting down'''

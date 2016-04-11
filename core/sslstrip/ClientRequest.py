@@ -73,12 +73,12 @@ class ClientRequest(Request):
             if 'referer' in headers:
                 real = self.urlMonitor.real
                 if len(real) > 0:
-                    dregex = re.compile("({})".format("|".join(map(re.escape, real.keys()))))
+                    dregex = re.compile("({0})".format("|".join(map(re.escape, real.keys()))))
                     headers['referer'] = dregex.sub(lambda x: str(real[x.string[x.start() :x.end()]]), headers['referer'])
 
             if 'host' in headers:
                 host = self.urlMonitor.URLgetRealHost(str(headers['host']))
-                log.debug("Modifing HOST header: {} -> {}".format(headers['host'], host))
+                log.debug("Modifing HOST header: {0} -> {1}".format(headers['host'], host))
                 headers['host'] = host
                 self.setHeader('Host', host)
 
@@ -117,7 +117,7 @@ class ClientRequest(Request):
         return "lock.ico"        
 
     def handleHostResolvedSuccess(self, address):
-        log.debug("Resolved host successfully: {} -> {}".format(self.getHeader('host'), address))
+        log.debug("Resolved host successfully: {0} -> {1}".format(self.getHeader('host'), address))
         host              = self.getHeader("host")
         headers           = self.cleanHeaders()
         client            = self.getClientIP()
@@ -139,12 +139,12 @@ class ClientRequest(Request):
             self.uri  = url # set URI to absolute
 
             if real:
-                dregex = re.compile("({})".format("|".join(map(re.escape, real.keys()))))
+                dregex = re.compile("({0})".format("|".join(map(re.escape, real.keys()))))
                 path = dregex.sub(lambda x: str(real[x.string[x.start() :x.end()]]), path)
                 postData = dregex.sub(lambda x: str(real[x.string[x.start() :x.end()]]), postData)
                 
                 if patchDict:
-                    dregex = re.compile("({})".format("|".join(map(re.escape, patchDict.keys()))))
+                    dregex = re.compile("({0})".format("|".join(map(re.escape, patchDict.keys()))))
                     postData = dregex.sub(lambda x: str(patchDict[x.string[x.start() :x.end()]]), postData)
 
             
@@ -163,7 +163,7 @@ class ClientRequest(Request):
             self.sendSpoofedFaviconResponse()
 
         elif self.urlMonitor.isSecureLink(client, url):
-            log.debug("Sending request via SSL/TLS: {}".format(url))
+            log.debug("Sending request via SSL/TLS: {0}".format(url))
             self.proxyViaSSL(address, self.method, path, postData, headers, self.urlMonitor.getSecurePort(client, url))
         
         else:
@@ -176,7 +176,7 @@ class ClientRequest(Request):
             self.proxyViaHTTP(address, self.method, path, postData, headers, port)
 
     def handleHostResolvedError(self, error):
-        log.debug("Host resolution error: {}".format(error))
+        log.debug("Host resolution error: {0}".format(error))
         try:
             self.finish()
         except:
@@ -186,7 +186,7 @@ class ClientRequest(Request):
         address = self.dnsCache.getCachedAddress(host)
 
         if address != None:
-            log.debug("Host cached: {} {}".format(host, address))
+            log.debug("Host cached: {0} {1}".format(host, address))
             return defer.succeed(address)
         else:
             
@@ -203,7 +203,7 @@ class ClientRequest(Request):
 
     def process(self):
         if self.getHeader('host') is not None:
-            log.debug("Resolving host: {}".format(self.getHeader('host')))
+            log.debug("Resolving host: {0}".format(self.getHeader('host')))
             host = self.getHeader('host').split(":")[0]
 
             if self.hsts:

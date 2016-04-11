@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python2.6
 
 # Copyright (c) 2014-2016 Moxie Marlinspike, Marcello Salvati
 #
@@ -43,8 +43,8 @@ mitmf_codename = 'The Dark Side'
 if os.geteuid() != 0:
     sys.exit("[-] The derp is strong with this one")
 
-parser = argparse.ArgumentParser(description="MITMf v{} - '{}'".format(mitmf_version, mitmf_codename), 
-                                 version="{} - '{}'".format(mitmf_version, mitmf_codename), 
+parser = argparse.ArgumentParser(description="MITMf v{0} - '{1}'".format(mitmf_version, mitmf_codename), 
+                                 version="{0} - '{1}'".format(mitmf_version, mitmf_codename), 
                                  usage='mitmf.py -i interface [mitmf options] [plugin name] [plugin options]', 
                                  epilog="Use wisely, young Padawan.",
                                  formatter_class=RawTextHelpFormatter)
@@ -89,14 +89,14 @@ options.mac = get_mac(options.interface)
 
 settings.Config.populate(options)
 
-log.debug("MITMf started: {}".format(sys.argv))
+log.debug("MITMf started: {0}".format(sys.argv))
 
 #Start Net-Creds
-print "[*] MITMf v{} - '{}'".format(mitmf_version, mitmf_codename)
+print "[*] MITMf v{0} - '{1}'".format(mitmf_version, mitmf_codename)
 
 NetCreds().start(options.interface, options.ip)
 print "|"
-print "|_ Net-Creds v{} online".format(NetCreds.version)
+print "|_ Net-Creds v{0} online".format(NetCreds.version)
 
 from core.proxyplugins import ProxyPlugins
 
@@ -108,17 +108,17 @@ for plugin in plugins:
 
         ProxyPlugins().add_plugin(plugin)
 
-        print "|_ {} v{}".format(plugin.name, plugin.version)
+        print "|_ {0} v{1}".format(plugin.name, plugin.version)
         if plugin.tree_info:
             for line in xrange(0, len(plugin.tree_info)):
-                print "|  |_ {}".format(plugin.tree_info.pop())
+                print "|  |_ {0}".format(plugin.tree_info.pop())
 
         plugin.setup_logger()
         plugin.initialize(options)
 
         if plugin.tree_info:
             for line in xrange(0, len(plugin.tree_info)):
-                print "|  |_ {}".format(plugin.tree_info.pop())
+                print "|  |_ {0}".format(plugin.tree_info.pop())
 
         plugin.start_config_watch()
 
@@ -126,7 +126,7 @@ if options.filter:
     from core.packetfilter import PacketFilter
     pfilter = PacketFilter(options.filter)
     print "|_ PacketFilter online"
-    print "   |_ Applying filter {} to incoming packets".format(options.filter)
+    print "   |_ Applying filter {0} to incoming packets".format(options.filter)
     try:
         pfilter.start()
     except KeyboardInterrupt:
@@ -168,7 +168,7 @@ else:
     #Start DNSChef
     from core.servers.DNS import DNSChef
     DNSChef().start()
-    print "|_ DNSChef v{} online".format(DNSChef.version)
+    print "|_ DNSChef v{0} online".format(DNSChef.version)
 
     #Start the SMB server
     from core.servers.SMB import SMB

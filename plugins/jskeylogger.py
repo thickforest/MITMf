@@ -54,9 +54,9 @@ class JSKeylogger(Inject, Plugin):
                         try:
                             nice += unichr(int(n))
                         except:
-                            self.clientlog.error("Error decoding char: {}".format(n), extra=request.clientInfo)
+                            self.clientlog.error("Error decoding char: {0}".format(n), extra=request.clientInfo)
 
-                self.clientlog.info(u"Host: {} | Field: {} | Keys: {}".format(request.headers['host'], input_field, nice), extra=request.clientInfo)
+                self.clientlog.info(u"Host: {0} | Field: {1} | Keys: {2}".format(request.headers['host'], input_field, nice), extra=request.clientInfo)
 
     def options(self, options):
         pass

